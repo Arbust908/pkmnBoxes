@@ -1,0 +1,19 @@
+{
+  "name": "pb-pkmn-boxes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "tailwind.config.js",
+  "dependencies": {
+    "postcss": "^7.0.24",
+    "tailwindcss": "^1.1.4",
+    "vue": "^2.6.10",
+    "webpack": "^4.41.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "tailcss": "npx tailwind build css/input.css -o css/main.css"
+  },
+  "author": "",
+  "license": "ISC"
+}

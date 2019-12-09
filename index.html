@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pokemon Boxes</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+    <main id="app">
+        <form action="" class="mx-2 my-3 flex">
+            <input type="text" class="bg-blue-100 px-3 my-1 mr-2 rounded-lg text-blue-600" v-model="lookNumber">
+            <button class="border border-blue-600 px-3 my-1 rounded-lg text-blue-600 hover:text-blue-800 hover:underline"
+            @click.prevent="search(lookNumber)">Buscar</button>
+        </form>
+        <section>
+            <h2 class="uppercase font-bold text-center text-blue-600"> Box {{ currentBoxNum + 1 }} </h2>
+            <section class="flex flex-wrap m-3">
+                <article v-for="box in currentBox" class="w-1/6 flex justify-center items-center mb-2">
+                    <div class="font-bold rounded w-full h-full m-2 flex justify-center items-center"
+                    v-bind:class="isLooked(box)">
+                        {{ box }}
+                    </div>
+                </article>
+            </section>
+            <section class="mx-2 my-4 flex justify-center items-center">
+                <button @click="downBox" class="rounded-lg p-2 mx-2 bg-gray-400" v-if="currentBoxNum"> < </button>
+                <button @click="upBox" class="rounded-lg p-2 mx-2 bg-gray-400" v-if="currentBoxNum < (boxes.length - 1)"> > </button>
+            </section>
+        </section>
+    </main>
+    <script>
+        var app = new Vue({
+            el: '#app',
+            data: {
+                selectedNumber: null,
+                columns: 6,
+                rows: 5,
+                boxes: [],
+                maxNumber: 400,
+                currentBoxNum: 0,
+                lookNumber: null,
+            },
+            created() {
+                this.createBoxes();
+            },
+            methods: {
+                calcLimit() {
+                    return this.maxNumber / ( this.columns * this.rows );
+                },
+                search(targetNum) {
+                    // console.error(this.boxes.length);
+                    for (let i = 0; i < this.boxes.length; i++) {
+                        const box = this.boxes[i];
+                        // console.warn( box );
+                        // console.warn( targetNum );
+                        // console.group();
+                        // console.log('Box ' +i);
+                        for (let x = 0; x < box.length; x++) {
+                            const number = box[x];
+                            // console.error(number+ ' vs ' +targetNum);
+                            // console.error(number == targetNum);
+                            if (number == targetNum) {
+                                // console.log(targetNum);
+                                // console.log(number);
+                                // console.log('Box numbre '+i);
+                                this.setBox(i);
+                                return box;
+                            }
+                        }
+                        // console.groupEnd();
+                        // console.info( '-- > o < --' );
+                    }
+                },
+                createBoxes() {
+                    for (let i = 0; i < this.calcLimit(); i++) {
+                        this.boxes[i] = [];
+                        for (let j = 0; j < (this.columns * this.rows); j++) {
+                            this.boxes[i].push( j+( (this.columns * this.rows) * i ) + 1);
+                        }
+                    }
+                },
+                downBox() {
+                    this.currentBoxNum--;
+                },
+                upBox() {
+                    this.currentBoxNum++;
+                },
+                setBox(boxNumber) {
+                    this.currentBoxNum = boxNumber;
+                },
+                isLooked(number) {
+                    return {
+                        'bg-blue-100 text-blue-800' : number == this.lookNumber,
+                        'bg-blue-600 text-white' : number != this.lookNumber,
+                    }
+                }
+            },
+            computed: {
+                currentBox() {
+                    return this.boxes[ this.currentBoxNum ];
+                }
+            },
+        });
+    </script>
+</body>
+</html>
